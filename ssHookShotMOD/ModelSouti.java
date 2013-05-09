@@ -49,7 +49,10 @@ public class ModelSouti extends ModelBiped
 		kikai1.render(f5);
 		kikai2.render(f5);
 		rittai.render(f5);
-
+		if(entity.isSneaking())
+		{
+			GL11.glTranslatef(0.0F,0.0F,-0.4F);
+		}
 		GL11.glTranslatef(0.0F,-0.4F,0.0F);
 	}
 

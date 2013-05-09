@@ -1,6 +1,7 @@
 package net.minecraft.ssHookShotMOD;
 
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +22,7 @@ public class Itemkousituken extends Item{
 		super(par1);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(20);
+		this.setCreativeTab(CreativeTabs.tabCombat);
 	}
 
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5)
@@ -48,26 +50,26 @@ public class Itemkousituken extends Item{
 
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
-		if(stack.getItemDamage() < 37){
+		if(stack.getItemDamage() < 20){
 			float m = 0;
 			if(ssTanksMOD.インスタンス.moveleg.PlayermMotion.containsKey(player)){
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion.get(player).x);
-				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion.get(player).y);
+				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion.get(player).y)*3;
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion.get(player).z);
 			}
 			if(ssTanksMOD.インスタンス.moveleg.PlayermMotion2.containsKey(player)){
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion2.get(player).x);
-				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion2.get(player).y);
+				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion2.get(player).y)*3;
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion2.get(player).z);
 			}
 			if(ssTanksMOD.インスタンス.moveleg.PlayermMotion3.containsKey(player)){
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion3.get(player).x);
-				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion3.get(player).y);
+				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion3.get(player).y)*3;
 				m += Math.abs(ssTanksMOD.インスタンス.moveleg.PlayermMotion3.get(player).z);
 			}
 			m*=10;
 			stack.setItemDamage(stack.getItemDamage()+(int)m);
-			entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m-1)*8);
+			entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m-1)*16);
 		}
 		return false;
 	}

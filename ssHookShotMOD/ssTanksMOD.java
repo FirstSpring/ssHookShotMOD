@@ -79,9 +79,6 @@ public class ssTanksMOD {
 		EntityRegistry.registerGlobalEntityID(EntityHook.class, "EntityHook", this.EntityHookID);
 		EntityRegistry.registerModEntity(EntityHook.class, "EntityHook", 0, this, 250, 1,true);
 
-		//EntityRegistry.registerGlobalEntityID(EntitySouti.class, "EntitySouti", this.EntitySoutiID);
-		//EntityRegistry.registerModEntity(EntitySouti.class, "EntitySouti", 1, this, 250, 1,false);
-		
 		this.moveleg = (MoveLeggings)new MoveLeggings(this.movelegID,EnumArmorMaterial.DIAMOND,2,2).setUnlocalizedName("sshookshot:moveleg");
 		LanguageRegistry.addName(moveleg, "hookshot");
 		LanguageRegistry.instance().addNameForObject(moveleg, "ja_JP", "フックショットもどき");

@@ -151,12 +151,12 @@ public class MoveLeggings extends ItemArmor
 			}
 			else{
 				PlayermMotion3.get(player).x *= 0.8F;
-				if(Math.abs(PlayermMotion3.get(player).y) > 0.2F)
+				if(PlayermMotion3.get(player).y >= 0.1F)
 					PlayermMotion3.get(player).y -= 0.05F;
 				PlayermMotion3.get(player).z *= 0.8F;
 				if(Math.abs(PlayermMotion3.get(player).x)<0.2F)
 					PlayermMotion3.get(player).x = 0;
-				if(Math.abs(PlayermMotion3.get(player).y)<0.2F)
+				if(PlayermMotion3.get(player).y<0.1F)
 					PlayermMotion3.get(player).y = 0;
 				if(Math.abs(PlayermMotion3.get(player).z)<0.2F)
 					PlayermMotion3.get(player).z = 0;
@@ -281,12 +281,6 @@ public class MoveLeggings extends ItemArmor
 		PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("位置合わせ",bos.toByteArray()),(Player) player);
 		this.PlayermMotion.put(player,new motionXYZ(xyz[0],xyz[1],xyz[2]));
 		this.PlayermMotion2.put(player,new motionXYZ(xyz2[0],xyz2[1],xyz2[2]));
-
-		if(pl>0){
-			xyz3[0] = 0;
-			xyz3[1] = 0;
-			xyz3[2] = 0;
-		}
 
 		xyz[0] = xyz[0] + xyz2[0]+xyz3[0];
 		xyz[1] = xyz[1] + xyz2[1]+xyz3[1];
