@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.WeakHashMap;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
@@ -29,6 +32,13 @@ public class MoveLeggings extends ItemArmor
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion2 = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion3 = new WeakHashMap<EntityPlayer,motionXYZ>();
+	public WeakHashMap<EntityPlayer,Integer> リチャージ = new WeakHashMap<EntityPlayer,Integer>();
+
+	@SideOnly(Side.CLIENT)
+	public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot)
+	{
+		return new ModelSouti();
+	}
 
 	public MoveLeggings(int par1, EnumArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
 		super(par1, par2EnumArmorMaterial, par3, par4);
@@ -45,7 +55,7 @@ public class MoveLeggings extends ItemArmor
 	{
 		if(!player.worldObj.isRemote)
 		{
-			player.capabilities.allowFlying = true;
+			player.capabilities.isFlying = true;
 			/*
 			if(!this.描画用Entity.containsKey(player)){
 				this.描画用Entity.put(player,new EntitySouti(player.worldObj,player));
@@ -55,12 +65,17 @@ public class MoveLeggings extends ItemArmor
 				this.描画用Entity.get(player).setPosition(player.posX,player.posY+1.0F,player.posZ);
 				this.描画用Entity.get(player).rotationYaw = player.rotationYaw;
 			}*/
+			if(!this.リチャージ.containsKey(player))
+				this.リチャージ.put(player,0);
 			if(!this.PlayermMotion.containsKey(player))
 				this.PlayermMotion.put(player,new motionXYZ(0,0,0));
 			if(!this.PlayermMotion2.containsKey(player))
 				this.PlayermMotion2.put(player,new motionXYZ(0,0,0));
 			if(!this.PlayermMotion3.containsKey(player))
 				this.PlayermMotion3.put(player,new motionXYZ(0,0,0));
+
+			if(this.リチャージ.get(player)>0)
+				this.リチャージ.put(player,this.リチャージ.get(player)-1);
 
 			if(RightHook.containsKey(player)){
 				if(RightHook.get(player).inEntity||RightHook.get(player).inGround)
@@ -127,17 +142,21 @@ public class MoveLeggings extends ItemArmor
 
 			if(ssTanksMOD.インスタンス.入力状態.get(player.username)[9] == 1)
 			{
-				PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-				PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-				PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F;
+				if(this.リチャージ.get(player)==0){
+					this.リチャージ.put(player,40);
+					PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+					PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+					PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
+				}
 			}
 			else{
 				PlayermMotion3.get(player).x *= 0.8F;
-				PlayermMotion3.get(player).y -= 0.05F;
+				if(Math.abs(PlayermMotion3.get(player).y) > 0.2F)
+					PlayermMotion3.get(player).y -= 0.05F;
 				PlayermMotion3.get(player).z *= 0.8F;
 				if(Math.abs(PlayermMotion3.get(player).x)<0.2F)
 					PlayermMotion3.get(player).x = 0;
-				if(Math.abs(PlayermMotion3.get(player).y)<0.1F)
+				if(Math.abs(PlayermMotion3.get(player).y)<0.2F)
 					PlayermMotion3.get(player).y = 0;
 				if(Math.abs(PlayermMotion3.get(player).z)<0.2F)
 					PlayermMotion3.get(player).z = 0;
@@ -269,10 +288,17 @@ public class MoveLeggings extends ItemArmor
 			xyz3[2] = 0;
 		}
 
-		xyz[0] += xyz2[0]+xyz3[0];
-		xyz[1] += xyz2[1]+xyz3[1];
-		xyz[2] += xyz2[2]+xyz3[2];
+		xyz[0] = xyz[0] + xyz2[0]+xyz3[0];
+		xyz[1] = xyz[1] + xyz2[1]+xyz3[1];
+		xyz[2] = xyz[2] + xyz2[2]+xyz3[2];
 
 		return xyz;
+	}
+
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer)
+	{
+		if(slot == 2)
+			return "/mods/sshookshot/textures/armor/moveleg.png";
+		return null;
 	}
 }

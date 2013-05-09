@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -22,11 +21,6 @@ public class Itemkousituken extends Item{
 		super(par1);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(20);
-	}
-
-	public EnumAction getItemUseAction(ItemStack par1ItemStack)
-	{
-		return EnumAction.bow;
 	}
 
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5)
@@ -82,10 +76,16 @@ public class Itemkousituken extends Item{
 	public void registerIcons(IconRegister par1IconRegister)
 	{
 		this.iconArray = new Icon[2];
-		this.iconArray[0] = par1IconRegister.registerIcon("sshookshot:kennhatuki");
-		this.iconArray[1] = par1IconRegister.registerIcon("sshookshot:kennhanasi");
+		this.iconArray[0] = par1IconRegister.registerIcon("sshookshot:kennhanasi");
+		this.iconArray[1] = par1IconRegister.registerIcon("sshookshot:kennhaari");
 	}
 
+	@SideOnly(Side.CLIENT)
+    public boolean isFull3D()
+    {
+        return true;
+    }
+	
 	@SideOnly(Side.CLIENT)
 	public Icon getIconFromDamage(int par1)
 	{

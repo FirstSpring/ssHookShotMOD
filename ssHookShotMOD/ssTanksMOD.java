@@ -93,7 +93,7 @@ public class ssTanksMOD {
 					"FDF",
 					"BSB",
                 'I',Item.ingotIron,
-                'D',Item.legsDiamond,
+                'D',Item.legsIron,
                 'F',Item.fishingRod,
                 'A',Item.arrow,
                 'B',Item.bow,
