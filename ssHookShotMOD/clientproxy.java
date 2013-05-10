@@ -16,6 +16,7 @@ public class clientproxy extends serverproxy{
 		RenderingRegistry.registerEntityRenderingHandler(EntityHook.class, new RenderHook());
 		//RenderingRegistry.registerEntityRenderingHandler(EntitySouti.class, new RenderEntitySouti());
 		
+		TickRegistry.registerTickHandler(new clientTickRender(), Side.CLIENT);
 		TickRegistry.registerTickHandler(new clienttickhandler(), Side.CLIENT);
 	}
 }

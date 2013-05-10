@@ -32,6 +32,7 @@ public class packethandler implements IPacketHandler
 					ssTanksMOD.インスタンス.クライアント側落ちない = dis.readBoolean();
 					ssTanksMOD.インスタンス.クライアント側パーティクル出す1 = dis.readBoolean();
 					ssTanksMOD.インスタンス.クライアント側パーティクル出す2 = dis.readBoolean();
+					ssTanksMOD.インスタンス.クライアント側燃料 = dis.readInt();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

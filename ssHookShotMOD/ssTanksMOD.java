@@ -25,12 +25,16 @@ public class ssTanksMOD {
 	float クライアント側モーションX = 0;
 	float クライアント側モーションY = 0;
 	float クライアント側モーションZ = 0;
+	int クライアント側燃料 = 0;
 	boolean クライアント側落ちない = false;
-	boolean クライアント側パーティクル出す1 = false;
-	boolean クライアント側パーティクル出す2 = false;
+	public Boolean クライアント側パーティクル出す1 = false;
+	public Boolean クライアント側パーティクル出す2 = false;
 	
 	Itemkousituken kenn;
 	int kennID;
+	
+	Item 燃料;
+	int 燃料ID;
 	
 	Item 替刃;
 	int 替刃ID;
@@ -59,6 +63,7 @@ public class ssTanksMOD {
 			movelegID = cfg.getItem("itemID", "movelegID", 5020).getInt();
 			kennID = cfg.getItem("itemID", "kenn", 5021).getInt();
 			替刃ID = cfg.getItem("itemID", "替刃ID", 5022).getInt();
+			燃料ID = cfg.getItem("itemID", "燃料ID", 5022).getInt();
 			EntityHookID = cfg.get("EntityID", "EntityHookID", 2704).getInt();
 		}
 		catch (Exception e)
@@ -84,9 +89,9 @@ public class ssTanksMOD {
 		GameRegistry.addRecipe(
 				new ItemStack(moveleg, 1), 
                 new Object[]{ 
-					"AIA",
+					"A A",
 					"BCB",
-					"FQF",
+					"F F",
                 'E',Item.ingotGold,
                 'C',Item.legsChain,
                 'F',Item.fishingRod,
@@ -100,12 +105,12 @@ public class ssTanksMOD {
 		LanguageRegistry.instance().addNameForObject(kenn, "ja_JP", "剣");
 		
 		GameRegistry.addRecipe(
-				new ItemStack(kenn, 1,35), 
+				new ItemStack(kenn, 1,20), 
                 new Object[]{ 
 					" S ",
 					"BB ",
 					"BB ",
-                'S',Item.ingotGold,
+                'S',Item.ingotIron,
                 'B',Item.stick,
                 });
 		
@@ -114,13 +119,28 @@ public class ssTanksMOD {
 		LanguageRegistry.instance().addNameForObject(替刃, "ja_JP", "替刃");
 		
 		GameRegistry.addRecipe(
-				new ItemStack(替刃, 12), 
+				new ItemStack(替刃, 6), 
                 new Object[]{ 
 					" T ",
 					" T ",
 					"S S",
                 'T',Item.ingotIron,
                 'S',Item.stick
+                });
+		
+		this.燃料 = new Itemnennryou(this.燃料ID).setUnlocalizedName("sshookshot:nennryou").setCreativeTab(CreativeTabs.tabCombat).setMaxStackSize(64).setMaxDamage(600);
+		LanguageRegistry.addName(燃料, "nennryou");
+		LanguageRegistry.instance().addNameForObject(燃料, "ja_JP", "燃料");
+		
+		GameRegistry.addRecipe(
+				new ItemStack(燃料, 32), 
+                new Object[]{ 
+					" M ",
+					" S ",
+					" K ",
+                'M',Item.coal,
+                'S',Item.firework,
+                'K',Item.goldNugget
                 });
 		
 		プロキシ.登録();

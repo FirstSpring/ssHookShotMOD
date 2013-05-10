@@ -28,12 +28,13 @@ public class MoveLeggings extends ItemArmor
 {
 	Random ran = new Random();
 
+	public WeakHashMap<EntityPlayer,Integer> 燃料 = new WeakHashMap<EntityPlayer,Integer>();
 	public WeakHashMap<EntityPlayer,EntityHook> LeftHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,EntityHook> RightHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion2 = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion3 = new WeakHashMap<EntityPlayer,motionXYZ>();
-	
+
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot)
 	{
@@ -57,6 +58,8 @@ public class MoveLeggings extends ItemArmor
 		{
 			player.capabilities.allowFlying = true;
 
+			if(!this.燃料.containsKey(player))
+				this.燃料.put(player,0);
 			if(!this.PlayermMotion.containsKey(player))
 				this.PlayermMotion.put(player,new motionXYZ(0,0,0));
 			if(!this.PlayermMotion2.containsKey(player))
@@ -65,10 +68,10 @@ public class MoveLeggings extends ItemArmor
 				this.PlayermMotion3.put(player,new motionXYZ(0,0,0));
 
 			if(RightHook.containsKey(player)&&(RightHook.get(player).inEntity||RightHook.get(player).inGround)){
-					player.fallDistance = 0.0F;
+				player.fallDistance = 0.0F;
 			}
 			else if(LeftHook.containsKey(player)&&(LeftHook.get(player).inEntity||LeftHook.get(player).inGround)){
-					player.fallDistance = 0.0F;
+				player.fallDistance = 0.0F;
 			}
 		}
 
@@ -123,9 +126,12 @@ public class MoveLeggings extends ItemArmor
 
 			if(ssTanksMOD.インスタンス.入力状態.get(player.username)[9] == 1)
 			{
-				PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-				PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-				PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
+				if(燃料.get(player) > 4){
+					PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+					PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+					PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
+					燃料.put(player,燃料.get(player)-4);
+				}
 			}
 			else{
 				PlayermMotion3.get(player).x *= 0.8F;
@@ -223,12 +229,15 @@ public class MoveLeggings extends ItemArmor
 
 		if(this.LeftHook.containsKey(player))
 		{
-			EntityHook LeftHook = this.LeftHook.get(player);
-			float lxyz[] = LeftHook.getxyz();
-			xyz[0] = lxyz[0];
-			xyz[1] = lxyz[1];
-			xyz[2] = lxyz[2];
-			落ちない = LeftHook.inEntity||LeftHook.inGround;
+			if(燃料.get(player) > 1){
+				EntityHook LeftHook = this.LeftHook.get(player);
+				float lxyz[] = LeftHook.getxyz();
+				xyz[0] = lxyz[0];
+				xyz[1] = lxyz[1];
+				xyz[2] = lxyz[2];
+				燃料.put(player,燃料.get(player)-1);
+				落ちない = LeftHook.inEntity||LeftHook.inGround;
+			}
 		}
 		else{
 			xyz[0] *= 0.99F;
@@ -242,12 +251,15 @@ public class MoveLeggings extends ItemArmor
 
 		if(this.RightHook.containsKey(player))
 		{
-			EntityHook RightHook =  this.RightHook.get(player);
-			float rxyz[] = RightHook.getxyz();
-			xyz2[0] = rxyz[0];
-			xyz2[1] = rxyz[1];
-			xyz2[2] = rxyz[2];
-			落ちない = RightHook.inEntity||RightHook.inGround;
+			if(燃料.get(player) > 1){
+				EntityHook RightHook =  this.RightHook.get(player);
+				float rxyz[] = RightHook.getxyz();
+				xyz2[0] = rxyz[0];
+				xyz2[1] = rxyz[1];
+				xyz2[2] = rxyz[2];
+				燃料.put(player,燃料.get(player)-1);
+				落ちない = RightHook.inEntity||RightHook.inGround;
+			}
 		}
 		else{
 			xyz2[0] *= 0.99F;
@@ -264,7 +276,7 @@ public class MoveLeggings extends ItemArmor
 			player.attackEntityFrom(DamageSource.fall,(int)player.fallDistance-2);
 			player.fallDistance = 0.0F;
 		}
-		
+
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(25);
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
@@ -274,12 +286,13 @@ public class MoveLeggings extends ItemArmor
 			dos.writeBoolean(落ちない);
 			dos.writeBoolean(xyz[0]!=0||xyz[1]!=0||xyz[2]!=0||xyz2[0]!=0||xyz2[1]!=0||xyz2[2]!=0);
 			dos.writeBoolean(xyz3[0]!=0||xyz3[1]!=0||xyz3[2]!=0);
-
+			dos.writeInt(this.燃料.get(player));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("位置合わせ",bos.toByteArray()),(Player) player);
+
 		this.PlayermMotion.put(player,new motionXYZ(xyz[0],xyz[1],xyz[2]));
 		this.PlayermMotion2.put(player,new motionXYZ(xyz2[0],xyz2[1],xyz2[2]));
 
