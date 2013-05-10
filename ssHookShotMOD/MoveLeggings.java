@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.WeakHashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -15,6 +16,7 @@ import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -26,14 +28,12 @@ public class MoveLeggings extends ItemArmor
 {
 	Random ran = new Random();
 
-	//public WeakHashMap<EntityPlayer,EntitySouti> 描画用Entity = new WeakHashMap<EntityPlayer,EntitySouti>();
 	public WeakHashMap<EntityPlayer,EntityHook> LeftHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,EntityHook> RightHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion2 = new WeakHashMap<EntityPlayer,motionXYZ>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion3 = new WeakHashMap<EntityPlayer,motionXYZ>();
-	public WeakHashMap<EntityPlayer,Integer> リチャージ = new WeakHashMap<EntityPlayer,Integer>();
-
+	
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot)
 	{
@@ -55,18 +55,8 @@ public class MoveLeggings extends ItemArmor
 	{
 		if(!player.worldObj.isRemote)
 		{
-			player.capabilities.isFlying = true;
-			/*
-			if(!this.描画用Entity.containsKey(player)){
-				this.描画用Entity.put(player,new EntitySouti(player.worldObj,player));
-				player.worldObj.spawnEntityInWorld(this.描画用Entity.get(player));
-			}
-			else{
-				this.描画用Entity.get(player).setPosition(player.posX,player.posY+1.0F,player.posZ);
-				this.描画用Entity.get(player).rotationYaw = player.rotationYaw;
-			}*/
-			if(!this.リチャージ.containsKey(player))
-				this.リチャージ.put(player,0);
+			player.capabilities.allowFlying = true;
+
 			if(!this.PlayermMotion.containsKey(player))
 				this.PlayermMotion.put(player,new motionXYZ(0,0,0));
 			if(!this.PlayermMotion2.containsKey(player))
@@ -74,15 +64,10 @@ public class MoveLeggings extends ItemArmor
 			if(!this.PlayermMotion3.containsKey(player))
 				this.PlayermMotion3.put(player,new motionXYZ(0,0,0));
 
-			if(this.リチャージ.get(player)>0)
-				this.リチャージ.put(player,this.リチャージ.get(player)-1);
-
-			if(RightHook.containsKey(player)){
-				if(RightHook.get(player).inEntity||RightHook.get(player).inGround)
+			if(RightHook.containsKey(player)&&(RightHook.get(player).inEntity||RightHook.get(player).inGround)){
 					player.fallDistance = 0.0F;
 			}
-			if(LeftHook.containsKey(player)){
-				if(LeftHook.get(player).inEntity||LeftHook.get(player).inGround)
+			else if(LeftHook.containsKey(player)&&(LeftHook.get(player).inEntity||LeftHook.get(player).inGround)){
 					player.fallDistance = 0.0F;
 			}
 		}
@@ -90,16 +75,12 @@ public class MoveLeggings extends ItemArmor
 		if(!player.worldObj.isRemote){
 
 			float[] xyz = this.getxyz(player);
-			player.stepHeight = 4.0F;
 			player.moveEntity(xyz[0],xyz[1],xyz[2]);
-			player.stepHeight = 0.5F;
 		}
 		else
 		{
-			clientproxy.mc.thePlayer.stepHeight = 4.0F;
 			if(ssTanksMOD.インスタンス.クライアント側モーションX==0&&ssTanksMOD.インスタンス.クライアント側モーションY==0&&ssTanksMOD.インスタンス.クライアント側モーションZ == 0){}
 			else clientproxy.mc.thePlayer.moveEntity(ssTanksMOD.インスタンス.クライアント側モーションX,ssTanksMOD.インスタンス.クライアント側モーションY,ssTanksMOD.インスタンス.クライアント側モーションZ);
-			clientproxy.mc.thePlayer.stepHeight = 0.5F;
 			if(ssTanksMOD.インスタンス.クライアント側落ちない)
 			{
 				clientproxy.mc.thePlayer.motionY = 0.0F;
@@ -142,12 +123,9 @@ public class MoveLeggings extends ItemArmor
 
 			if(ssTanksMOD.インスタンス.入力状態.get(player.username)[9] == 1)
 			{
-				if(this.リチャージ.get(player)==0){
-					this.リチャージ.put(player,40);
-					PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-					PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
-					PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
-				}
+				PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+				PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
+				PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
 			}
 			else{
 				PlayermMotion3.get(player).x *= 0.8F;
@@ -186,7 +164,24 @@ public class MoveLeggings extends ItemArmor
 				EntityHook RightHook = new EntityHook(player.worldObj,player,6.0F,15.0F);
 				this.RightHook.put(player,RightHook);
 				player.worldObj.spawnEntityInWorld(RightHook);
-
+			}
+			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[5] == 1&&ssTanksMOD.インスタンス.入力状態.get(player.username)[13] == 1)
+			{
+				if(!LeftHook.containsKey(player)){}
+				else
+				{
+					this.LeftHook.get(player).setDead();
+					this.LeftHook.remove(player);
+				}
+			}
+			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[5] == 1&&ssTanksMOD.インスタンス.入力状態.get(player.username)[14] == 1)
+			{
+				if(!RightHook.containsKey(player)){}
+				else
+				{
+					this.RightHook.get(player).setDead();
+					this.RightHook.remove(player);
+				}
 			}
 			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[5] == 1&&ssTanksMOD.インスタンス.入力状態.get(player.username)[6] == 1||ssTanksMOD.インスタンス.入力状態.get(player.username)[13] == 1)
 			{
@@ -264,6 +259,12 @@ public class MoveLeggings extends ItemArmor
 			}
 		}
 
+		if(pl > 0&&player.fallDistance > 2.0F&&!Block.blocksList[pl].blockMaterial.isLiquid())
+		{
+			player.attackEntityFrom(DamageSource.fall,(int)player.fallDistance-2);
+			player.fallDistance = 0.0F;
+		}
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(25);
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {

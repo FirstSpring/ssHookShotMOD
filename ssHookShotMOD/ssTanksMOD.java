@@ -3,7 +3,6 @@ package net.minecraft.ssHookShotMOD;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
@@ -19,7 +18,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "ssTanksMOD", name="フックショットMOD", version="0_0")
+@Mod(modid = "ssHookShotMOD", name="フックショットMOD", version="0_0")
 @NetworkMod(clientSideRequired = true ,serverSideRequired = false,channels = {"位置合わせ" ,"ssKeyCh"},packetHandler = packethandler.class)
 public class ssTanksMOD {
 
@@ -47,7 +46,7 @@ public class ssTanksMOD {
 	@SidedProxy(clientSide = "net.minecraft.ssHookShotMOD.clientproxy", serverSide = "net.minecraft.ssHookShotMOD.serverproxy")
 	public static serverproxy プロキシ;
 
-	@Mod.Instance("ssTanksMOD")
+	@Mod.Instance("ssHookShotMOD")
 	public static ssTanksMOD インスタンス;
 
 	@Mod.PreInit
@@ -61,7 +60,6 @@ public class ssTanksMOD {
 			kennID = cfg.getItem("itemID", "kenn", 5021).getInt();
 			替刃ID = cfg.getItem("itemID", "替刃ID", 5022).getInt();
 			EntityHookID = cfg.get("EntityID", "EntityHookID", 2704).getInt();
-			//EntitySoutiID = cfg.get("EntityID", "EntitySoutiID", 2705).getInt();
 		}
 		catch (Exception e)
 		{
@@ -79,7 +77,7 @@ public class ssTanksMOD {
 		EntityRegistry.registerGlobalEntityID(EntityHook.class, "EntityHook", this.EntityHookID);
 		EntityRegistry.registerModEntity(EntityHook.class, "EntityHook", 0, this, 250, 1,true);
 
-		this.moveleg = (MoveLeggings)new MoveLeggings(this.movelegID,EnumArmorMaterial.DIAMOND,2,2).setUnlocalizedName("sshookshot:moveleg");
+		this.moveleg = (MoveLeggings)new MoveLeggings(this.movelegID,EnumArmorMaterial.CHAIN,2,2).setUnlocalizedName("sshookshot:moveleg");
 		LanguageRegistry.addName(moveleg, "hookshot");
 		LanguageRegistry.instance().addNameForObject(moveleg, "ja_JP", "フックショットもどき");
 		
@@ -87,14 +85,14 @@ public class ssTanksMOD {
 				new ItemStack(moveleg, 1), 
                 new Object[]{ 
 					"AIA",
-					"FDF",
-					"BSB",
-                'I',Item.ingotIron,
-                'D',Item.legsIron,
+					"BCB",
+					"FQF",
+                'E',Item.ingotGold,
+                'C',Item.legsChain,
                 'F',Item.fishingRod,
                 'A',Item.arrow,
                 'B',Item.bow,
-                'S',Block.lever
+                'Q',Item.netherQuartz
                 });
 		
 		this.kenn = (Itemkousituken)new Itemkousituken(this.kennID).setUnlocalizedName("sshookshot:kenn");
@@ -104,10 +102,10 @@ public class ssTanksMOD {
 		GameRegistry.addRecipe(
 				new ItemStack(kenn, 1,35), 
                 new Object[]{ 
-					" T ",
+					" S ",
 					"BB ",
 					"BB ",
-                'T',Item.ingotIron,
+                'S',Item.ingotGold,
                 'B',Item.stick,
                 });
 		
@@ -120,8 +118,9 @@ public class ssTanksMOD {
                 new Object[]{ 
 					" T ",
 					" T ",
-					"   ",
+					"S S",
                 'T',Item.ingotIron,
+                'S',Item.stick
                 });
 		
 		プロキシ.登録();

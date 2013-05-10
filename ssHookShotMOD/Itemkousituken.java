@@ -71,7 +71,7 @@ public class Itemkousituken extends Item{
 			m *= 10;
 			//player.sendChatToPlayer("速度"+m+"攻撃力"+((int)m)*4+"ダメージ"+(int)m*2);
 			if(m > 0){
-				stack.setItemDamage(stack.getItemDamage()+(int)m*2);
+				stack.setItemDamage(stack.getItemDamage()+(int)m);
 				entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m)*4);
 			}
 			else
