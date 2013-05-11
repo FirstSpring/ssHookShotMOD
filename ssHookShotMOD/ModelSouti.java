@@ -30,7 +30,7 @@ public class ModelSouti extends ModelBiped
 		kikai2.mirror = true;
 		setRotation(kikai2, -0.3490659F, 0F, 0F);
 		rittai = new ModelRenderer(this, 0, 40);
-		rittai.addBox(-2F, 0F, 3F, 6, 4, 3);
+		rittai.addBox(-3F, 0F, 3F, 6, 4, 3);
 		rittai.setRotationPoint(0F, 0F, 0F);
 		rittai.setTextureSize(64, 64);
 		rittai.mirror = true;

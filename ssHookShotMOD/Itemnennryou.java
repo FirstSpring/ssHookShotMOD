@@ -15,9 +15,9 @@ public class Itemnennryou extends Item{
 	{
 		if(!w.isRemote)
 		{
-			if(ssTanksMOD.インスタンス.moveleg.燃料.containsKey(p)){
-				if(ssTanksMOD.インスタンス.moveleg.燃料.get(p) < 24000){
-					ssTanksMOD.インスタンス.moveleg.燃料.put(p,ssTanksMOD.インスタンス.moveleg.燃料.get(p)+600);
+			if(p.getCurrentItemOrArmor(2) != null){
+				if((24000-p.getCurrentItemOrArmor(2).getItemDamage()) < 24000){
+					p.getCurrentItemOrArmor(2).setItemDamage(p.getCurrentItemOrArmor(2).getItemDamage()-600);
 					is.stackSize--;
 				}
 			}

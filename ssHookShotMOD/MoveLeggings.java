@@ -19,16 +19,16 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class MoveLeggings extends ItemArmor
+public class MoveLeggings extends ItemArmor implements ISpecialArmor
 {
 	Random ran = new Random();
 
-	public WeakHashMap<EntityPlayer,Integer> 燃料 = new WeakHashMap<EntityPlayer,Integer>();
 	public WeakHashMap<EntityPlayer,EntityHook> LeftHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,EntityHook> RightHook = new WeakHashMap<EntityPlayer,EntityHook>();
 	public WeakHashMap<EntityPlayer,motionXYZ> PlayermMotion = new WeakHashMap<EntityPlayer,motionXYZ>();
@@ -43,7 +43,7 @@ public class MoveLeggings extends ItemArmor
 
 	public MoveLeggings(int par1, EnumArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
 		super(par1, par2EnumArmorMaterial, par3, par4);
-		this.setMaxDamage(-1);
+		this.setMaxDamage(24000);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -58,8 +58,6 @@ public class MoveLeggings extends ItemArmor
 		{
 			player.capabilities.allowFlying = true;
 
-			if(!this.燃料.containsKey(player))
-				this.燃料.put(player,0);
 			if(!this.PlayermMotion.containsKey(player))
 				this.PlayermMotion.put(player,new motionXYZ(0,0,0));
 			if(!this.PlayermMotion2.containsKey(player))
@@ -77,7 +75,7 @@ public class MoveLeggings extends ItemArmor
 
 		if(!player.worldObj.isRemote){
 
-			float[] xyz = this.getxyz(player);
+			float[] xyz = this.getxyz(player,itemStack);
 			player.moveEntity(xyz[0],xyz[1],xyz[2]);
 		}
 		else
@@ -126,11 +124,11 @@ public class MoveLeggings extends ItemArmor
 
 			if(ssTanksMOD.インスタンス.入力状態.get(player.username)[9] == 1)
 			{
-				if(燃料.get(player) > 4){
+				if((24000-itemStack.getItemDamage()) >= 4){
 					PlayermMotion3.get(player).x = -MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
 					PlayermMotion3.get(player).z = MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)*0.5F;
 					PlayermMotion3.get(player).y = -MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)*0.8F+0.2F*0.5F;
-					燃料.put(player,燃料.get(player)-4);
+					itemStack.setItemDamage(itemStack.getItemDamage()+4);
 				}
 			}
 			else{
@@ -189,7 +187,7 @@ public class MoveLeggings extends ItemArmor
 					this.RightHook.remove(player);
 				}
 			}
-			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[5] == 1&&ssTanksMOD.インスタンス.入力状態.get(player.username)[6] == 1||ssTanksMOD.インスタンス.入力状態.get(player.username)[13] == 1)
+			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[13] == 1)
 			{
 				if(!LeftHook.containsKey(player)){}
 				else
@@ -202,7 +200,7 @@ public class MoveLeggings extends ItemArmor
 				this.LeftHook.put(player,LeftHook);
 				player.worldObj.spawnEntityInWorld(LeftHook);
 			}
-			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[5] == 1&&ssTanksMOD.インスタンス.入力状態.get(player.username)[7] == 1||ssTanksMOD.インスタンス.入力状態.get(player.username)[14] == 1)
+			else if(ssTanksMOD.インスタンス.入力状態.get(player.username)[14] == 1)
 			{
 				if(!RightHook.containsKey(player)){}
 				else
@@ -218,7 +216,7 @@ public class MoveLeggings extends ItemArmor
 		}
 	}
 
-	private float[] getxyz(EntityPlayer player) {
+	private float[] getxyz(EntityPlayer player,ItemStack is) {
 		int pl = player.worldObj.getBlockId((int)player.posX,(int)(player.posY-0.5F),(int)player.posZ);
 
 		float[] xyz = this.PlayermMotion.get(player).getMotion();
@@ -229,13 +227,13 @@ public class MoveLeggings extends ItemArmor
 
 		if(this.LeftHook.containsKey(player))
 		{
-			if(燃料.get(player) > 1){
+			if((24000-is.getItemDamage()) >= 1){
 				EntityHook LeftHook = this.LeftHook.get(player);
 				float lxyz[] = LeftHook.getxyz();
 				xyz[0] = lxyz[0];
 				xyz[1] = lxyz[1];
 				xyz[2] = lxyz[2];
-				燃料.put(player,燃料.get(player)-1);
+				is.setItemDamage(is.getItemDamage()+1);
 				落ちない = LeftHook.inEntity||LeftHook.inGround;
 			}
 		}
@@ -251,13 +249,13 @@ public class MoveLeggings extends ItemArmor
 
 		if(this.RightHook.containsKey(player))
 		{
-			if(燃料.get(player) > 1){
+			if((24000-is.getItemDamage()) >= 1){
 				EntityHook RightHook =  this.RightHook.get(player);
 				float rxyz[] = RightHook.getxyz();
 				xyz2[0] = rxyz[0];
 				xyz2[1] = rxyz[1];
 				xyz2[2] = rxyz[2];
-				燃料.put(player,燃料.get(player)-1);
+				is.setItemDamage(is.getItemDamage()+1);
 				落ちない = RightHook.inEntity||RightHook.inGround;
 			}
 		}
@@ -286,7 +284,7 @@ public class MoveLeggings extends ItemArmor
 			dos.writeBoolean(落ちない);
 			dos.writeBoolean(xyz[0]!=0||xyz[1]!=0||xyz[2]!=0||xyz2[0]!=0||xyz2[1]!=0||xyz2[2]!=0);
 			dos.writeBoolean(xyz3[0]!=0||xyz3[1]!=0||xyz3[2]!=0);
-			dos.writeInt(this.燃料.get(player));
+			dos.writeInt(24000-is.getItemDamage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -309,4 +307,17 @@ public class MoveLeggings extends ItemArmor
 			return "/mods/sshookshot/textures/armor/moveleg.png";
 		return null;
 	}
+
+	@Override
+	public ArmorProperties getProperties(EntityLiving player, ItemStack armor, DamageSource source, double damage,int slot) {
+		return new ISpecialArmor.ArmorProperties(0,0,0);
+	}
+
+	@Override
+	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+		return 0;
+	}
+
+	@Override
+	public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot) {}
 }

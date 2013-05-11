@@ -87,17 +87,15 @@ public class ssTanksMOD {
 		LanguageRegistry.instance().addNameForObject(moveleg, "ja_JP", "フックショットもどき");
 		
 		GameRegistry.addRecipe(
-				new ItemStack(moveleg, 1), 
+				new ItemStack(moveleg,1,24000), 
                 new Object[]{ 
 					"A A",
 					"BCB",
 					"F F",
-                'E',Item.ingotGold,
                 'C',Item.legsChain,
                 'F',Item.fishingRod,
                 'A',Item.arrow,
                 'B',Item.bow,
-                'Q',Item.netherQuartz
                 });
 		
 		this.kenn = (Itemkousituken)new Itemkousituken(this.kennID).setUnlocalizedName("sshookshot:kenn");
@@ -119,7 +117,7 @@ public class ssTanksMOD {
 		LanguageRegistry.instance().addNameForObject(替刃, "ja_JP", "替刃");
 		
 		GameRegistry.addRecipe(
-				new ItemStack(替刃, 6), 
+				new ItemStack(替刃, 8), 
                 new Object[]{ 
 					" T ",
 					" T ",
@@ -137,10 +135,9 @@ public class ssTanksMOD {
                 new Object[]{ 
 					" M ",
 					" S ",
-					" K ",
+					"   ",
                 'M',Item.coal,
                 'S',Item.firework,
-                'K',Item.goldNugget
                 });
 		
 		プロキシ.登録();

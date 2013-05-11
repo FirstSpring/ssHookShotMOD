@@ -66,12 +66,12 @@ public class Itemkousituken extends Item{
 		if(stack.getItemDamage() < 20&&!player.worldObj.isRemote){
 			double m = 0;
 			m += Math.abs(lastmotion.get(player).x - player.posX);
-			m += Math.abs(lastmotion.get(player).y - player.posY);
+			m += Math.abs(lastmotion.get(player).y - player.posY)*2;
 			m += Math.abs(lastmotion.get(player).z - player.posZ);
 			m *= 10;
 			if(m > 0){
 				stack.setItemDamage(stack.getItemDamage()+(int)m);
-				entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m)*4);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m)*5);
 			}
 			else
 			{
