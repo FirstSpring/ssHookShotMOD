@@ -86,18 +86,6 @@ public class MoveLeggings extends ItemArmor implements ISpecialArmor
 			{
 				clientproxy.mc.thePlayer.motionY = 0.0F;
 			}
-			if(ssTanksMOD.インスタンス.クライアント側パーティクル出す1){
-				for (int l = -8; l < 9; ++l)
-				{
-					player.worldObj.spawnParticle("crit", player.posX+(ran.nextInt(10)-5)*0.02D, player.posY+(ran.nextInt(10)-5)*0.02D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.02D,0,0,0);
-				}
-			}
-			if(ssTanksMOD.インスタンス.クライアント側パーティクル出す2){
-				for (int l = -8; l < 9; ++l)
-				{
-					player.worldObj.spawnParticle("smoke", player.posX+(ran.nextInt(10)-5)*0.05D, player.posY+(ran.nextInt(10)-5)*0.05D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.05D,0,0,0);
-				}
-			}
 		}
 
 		if(player.worldObj.isRemote)
@@ -282,14 +270,24 @@ public class MoveLeggings extends ItemArmor implements ISpecialArmor
 			dos.writeFloat(xyz[1]+xyz2[1]+xyz3[1]);
 			dos.writeFloat(xyz[2]+xyz2[2]+xyz3[2]);
 			dos.writeBoolean(落ちない);
-			dos.writeBoolean(xyz[0]!=0||xyz[1]!=0||xyz[2]!=0||xyz2[0]!=0||xyz2[1]!=0||xyz2[2]!=0);
-			dos.writeBoolean(xyz3[0]!=0||xyz3[1]!=0||xyz3[2]!=0);
 			dos.writeInt(24000-is.getItemDamage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("位置合わせ",bos.toByteArray()),(Player) player);
+
+		bos = new ByteArrayOutputStream(25);
+		dos = new DataOutputStream(bos);
+		try {
+			dos.writeUTF(player.username);
+			dos.writeBoolean(xyz[0]!=0||xyz[1]!=0||xyz[2]!=0||xyz2[0]!=0||xyz2[1]!=0||xyz2[2]!=0);
+			dos.writeBoolean(xyz3[0]!=0||xyz3[1]!=0||xyz3[2]!=0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload("パーティクル同期",bos.toByteArray()));
 
 		this.PlayermMotion.put(player,new motionXYZ(xyz[0],xyz[1],xyz[2]));
 		this.PlayermMotion2.put(player,new motionXYZ(xyz2[0],xyz2[1],xyz2[2]));

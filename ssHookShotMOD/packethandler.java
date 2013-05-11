@@ -30,9 +30,20 @@ public class packethandler implements IPacketHandler
 					ssTanksMOD.インスタンス.クライアント側モーションY = dis.readFloat();
 					ssTanksMOD.インスタンス.クライアント側モーションZ = dis.readFloat();
 					ssTanksMOD.インスタンス.クライアント側落ちない = dis.readBoolean();
-					ssTanksMOD.インスタンス.クライアント側パーティクル出す1 = dis.readBoolean();
-					ssTanksMOD.インスタンス.クライアント側パーティクル出す2 = dis.readBoolean();
 					ssTanksMOD.インスタンス.クライアント側燃料 = dis.readInt();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(packet.channel.equals("パーティクル同期")){
+				EntityPlayer playerd = (EntityPlayer)player;
+				InputStream is = new ByteArrayInputStream(packet.data);
+				DataInputStream dis = new DataInputStream(is);
+
+				try {
+					String name = dis.readUTF();
+					ssTanksMOD.インスタンス.クライアント側パーティクル出す1.put(name,dis.readBoolean());
+					ssTanksMOD.インスタンス.クライアント側パーティクル出す2.put(name,dis.readBoolean());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -5,9 +5,11 @@ import java.util.logging.Level;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.EnumHelper;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -19,7 +21,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = "ssHookShotMOD", name="フックショットMOD", version="0_0")
-@NetworkMod(clientSideRequired = true ,serverSideRequired = false,channels = {"位置合わせ" ,"ssKeyCh"},packetHandler = packethandler.class)
+@NetworkMod(clientSideRequired = true ,serverSideRequired = false,channels = {"パーティクル同期","位置合わせ" ,"ssKeyCh"},packetHandler = packethandler.class)
 public class ssTanksMOD {
 
 	float クライアント側モーションX = 0;
@@ -27,8 +29,11 @@ public class ssTanksMOD {
 	float クライアント側モーションZ = 0;
 	int クライアント側燃料 = 0;
 	boolean クライアント側落ちない = false;
-	public Boolean クライアント側パーティクル出す1 = false;
-	public Boolean クライアント側パーティクル出す2 = false;
+	
+	public HashMap<String,Boolean> クライアント側パーティクル出す1 = new HashMap<String,Boolean>();
+	public HashMap<String,Boolean> クライアント側パーティクル出す2 = new HashMap<String,Boolean>();
+	
+	EnumToolMaterial 剣 = EnumHelper.addToolMaterial("剣",1,0,20,0,14);
 	
 	Itemkousituken kenn;
 	int kennID;
@@ -78,7 +83,7 @@ public class ssTanksMOD {
 	
 	@Mod.Init
 	public void Init(FMLInitializationEvent event) {
-
+		
 		EntityRegistry.registerGlobalEntityID(EntityHook.class, "EntityHook", this.EntityHookID);
 		EntityRegistry.registerModEntity(EntityHook.class, "EntityHook", 0, this, 250, 1,true);
 
