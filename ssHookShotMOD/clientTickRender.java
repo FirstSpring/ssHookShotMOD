@@ -16,33 +16,34 @@ public class clientTickRender implements ITickHandler
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData){
-
-		for (String key : ssTanksMOD.インスタンス.クライアント側パーティクル出す1.keySet()) {
-			if(ssTanksMOD.インスタンス.クライアント側パーティクル出す1.get(key))
-			{
-				EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
-				if(player != null){
-					float fy = 0;
-					if(!player.username.equals(mc.thePlayer.username))
-						fy = 1.5F;
-					for (int l = -8; l < 9; ++l)
-					{
-						player.worldObj.spawnParticle("crit", player.posX+(ran.nextInt(10)-5)*0.02D, player.posY+fy+(ran.nextInt(10)-5)*0.02D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.02D,0,0,0);
+		if(mc.thePlayer != null&&mc.theWorld != null){
+			for (String key : ssTanksMOD.インスタンス.クライアント側パーティクル出す1.keySet()) {
+				if(ssTanksMOD.インスタンス.クライアント側パーティクル出す1.get(key))
+				{
+					EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
+					if(player != null){
+						float fy = 0;
+						if(!player.username.equals(mc.thePlayer.username))
+							fy = 1.5F;
+						for (int l = -8; l < 9; ++l)
+						{
+							player.worldObj.spawnParticle("crit", player.posX+(ran.nextInt(10)-5)*0.02D, player.posY+fy+(ran.nextInt(10)-5)*0.02D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.02D,0,0,0);
+						}
 					}
 				}
 			}
-		}
-		for (String key : ssTanksMOD.インスタンス.クライアント側パーティクル出す2.keySet()) {
-			if(ssTanksMOD.インスタンス.クライアント側パーティクル出す2.get(key))
-			{
-				EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
-				if(player != null){
-					float fy = 0;
-					if(!player.username.equals(mc.thePlayer.username))
-						fy = 1.5F;
-					for (int l = -8; l < 9; ++l)
-					{
-						player.worldObj.spawnParticle("smoke", player.posX+(ran.nextInt(10)-5)*0.02D, player.posY+fy+(ran.nextInt(10)-5)*0.02D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.02D,0,0,0);
+			for (String key : ssTanksMOD.インスタンス.クライアント側パーティクル出す2.keySet()) {
+				if(ssTanksMOD.インスタンス.クライアント側パーティクル出す2.get(key))
+				{
+					EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
+					if(player != null){
+						float fy = 0;
+						if(!player.username.equals(mc.thePlayer.username))
+							fy = 1.5F;
+						for (int l = -8; l < 9; ++l)
+						{
+							player.worldObj.spawnParticle("smoke", player.posX+(ran.nextInt(10)-5)*0.02D, player.posY+fy+(ran.nextInt(10)-5)*0.02D-0.8F, player.posZ+(ran.nextInt(10)-5)*0.02D,0,0,0);
+						}
 					}
 				}
 			}

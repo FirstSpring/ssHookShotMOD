@@ -76,11 +76,10 @@ public class Itemkousituken extends ItemSword{
 			m += Math.abs(lastmotion.get(player).x - player.posX);
 			m += Math.abs(lastmotion.get(player).y - player.posY)*2;
 			m += Math.abs(lastmotion.get(player).z - player.posZ);
-			m += (m*0.2F)*EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
 			m *= 10;
 			if(m > 0){
 				stack.setItemDamage(stack.getItemDamage()+(int)m);
-				entity.attackEntityFrom(DamageSource.causePlayerDamage(player),((int)m)*5);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player),(int)(m+((m*0.2F)*EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack)))*5);
 			}
 			else
 			{
