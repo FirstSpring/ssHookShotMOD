@@ -24,22 +24,24 @@ public class clienttickhandler implements ITickHandler
 		{
 			byte[] keys = new byte[20];
 
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("W")))
+			String[] k = ssTanksMOD.インスタンス.keys;
+			
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[0])))
 				keys[0] = 1;
 			else keys[0] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("A")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[1])))
 				keys[1] = 1;
 			else keys[1] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("S")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[2])))
 				keys[2] = 1;
 			else keys[2] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("D")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[3])))
 				keys[3] = 1;
 			else keys[3] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("SPACE")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[4])))
 				keys[4] = 1;
 			else keys[4] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("LSHIFT")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[5])))
 				keys[5] = 1;
 			else keys[5] = 0;
 			if(Mouse.isButtonDown(0))
@@ -48,25 +50,25 @@ public class clienttickhandler implements ITickHandler
 			if(Mouse.isButtonDown(1))
 				keys[7] = 1;
 			else keys[7] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("TAB")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[6])))
 				keys[8] = 1;
 			else keys[8] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("LCONTROL")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[7])))
 				keys[9] = 1;
 			else keys[9] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("R")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[8])))
 				keys[10] = 1;
 			else keys[10] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("F")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[9])))
 				keys[11] = 1;
 			else keys[11] = 0;
 			if(Mouse.isButtonDown(2))
 				keys[12] = 1;
 			else keys[12] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("V")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[10])))
 				keys[13] = 1;
 			else keys[13] = 0;
-			if(Keyboard.isKeyDown(Keyboard.getKeyIndex("B")))
+			if(Keyboard.isKeyDown(Keyboard.getKeyIndex(k[11])))
 				keys[14] = 1;
 			else keys[14] = 0;
 			
@@ -81,9 +83,9 @@ public class clienttickhandler implements ITickHandler
 		if(!mc.isGamePaused&&mc.inGameHasFocus&&mc.thePlayer != null&&mc.thePlayer.getCurrentItemOrArmor(2) != null&&mc.thePlayer.getCurrentItemOrArmor(2).getItem().itemID == ssTanksMOD.インスタンス.moveleg.itemID){
 			int c = 0;
 			c += 255<<24;
-			c += 102<<16;
-			c += 204<<8;
-			c += 0;
+			c += ssTanksMOD.インスタンス.uired<<16;
+			c += ssTanksMOD.インスタンス.uigreen<<8;
+			c += ssTanksMOD.インスタンス.uiblue;
 			mc.fontRenderer.drawString("燃料"+ssTanksMOD.インスタンス.クライアント側燃料+"/24000",0,0,c);
 		}
 	}

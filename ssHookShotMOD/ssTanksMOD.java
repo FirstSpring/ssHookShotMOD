@@ -33,6 +33,12 @@ public class ssTanksMOD {
 	public HashMap<String,Boolean> クライアント側パーティクル出す1 = new HashMap<String,Boolean>();
 	public HashMap<String,Boolean> クライアント側パーティクル出す2 = new HashMap<String,Boolean>();
 	
+	String keys[] = new String[20];
+	
+	int uired;
+	int uigreen;
+	int uiblue;
+	
 	EnumToolMaterial 剣 = EnumHelper.addToolMaterial("剣",1,0,20,0,14);
 	
 	Itemkousituken kenn;
@@ -70,6 +76,21 @@ public class ssTanksMOD {
 			替刃ID = cfg.getItem("itemID", "替刃ID", 5022).getInt();
 			燃料ID = cfg.getItem("itemID", "燃料ID", 5022).getInt();
 			EntityHookID = cfg.get("EntityID", "EntityHookID", 2704).getInt();
+			keys[0] = cfg.get("キー入力","W","W").getString();
+			keys[1] = cfg.get("キー入力","A","A").getString();
+			keys[2] = cfg.get("キー入力","S","S").getString();
+			keys[3] = cfg.get("キー入力","D","D").getString();
+			keys[4] = cfg.get("キー入力","SPACE","SPACE").getString();
+			keys[5] = cfg.get("キー入力","LSHIFT","LSHIFT").getString();
+			keys[6] = cfg.get("キー入力","TAB","TAB").getString();
+			keys[7] = cfg.get("キー入力","LCONTROL","LCONTROL").getString();
+			keys[8] = cfg.get("キー入力","R","R").getString();
+			keys[9] = cfg.get("キー入力","F","F").getString();
+			keys[10] = cfg.get("キー入力","V","V").getString();
+			keys[11] = cfg.get("キー入力","B","B").getString();
+			uired = cfg.get("表示色","赤",255).getInt();
+			uigreen = cfg.get("表示色","緑",255).getInt();
+			uiblue = cfg.get("表示色","青",255).getInt();
 		}
 		catch (Exception e)
 		{
