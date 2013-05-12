@@ -21,7 +21,7 @@ public class clientTickRender implements ITickHandler
 				if(ssTanksMOD.インスタンス.クライアント側パーティクル出す1.get(key))
 				{
 					EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
-					if(player != null){
+					if(player != null&&player.getCurrentItemOrArmor(2) != null&&player.getCurrentItemOrArmor(2).getItem().itemID == ssTanksMOD.インスタンス.moveleg.itemID){
 						float fy = 0;
 						if(!player.username.equals(mc.thePlayer.username))
 							fy = 1.5F;
@@ -36,7 +36,7 @@ public class clientTickRender implements ITickHandler
 				if(ssTanksMOD.インスタンス.クライアント側パーティクル出す2.get(key))
 				{
 					EntityPlayer player = mc.theWorld.getPlayerEntityByName(key);
-					if(player != null){
+					if(player != null&&player.getCurrentItemOrArmor(2) != null&&player.getCurrentItemOrArmor(2).getItem().itemID == ssTanksMOD.インスタンス.moveleg.itemID){
 						float fy = 0;
 						if(!player.username.equals(mc.thePlayer.username))
 							fy = 1.5F;
